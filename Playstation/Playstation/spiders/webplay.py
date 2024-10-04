@@ -7,7 +7,7 @@ class WebplaySpider(scrapy.Spider):
     start_urls = ["https://store.playstation.com/pt-br/category/dc464929-edee-48a5-bcd3-1e6f5250ae80/1"]
 
     def start_requests(self):
-        # Adicionando um cabeçalho User-Agent
+        #User-Agent
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
         }
@@ -19,14 +19,14 @@ class WebplaySpider(scrapy.Spider):
             self.log(f'Erro ao acessar a página: {response.status}')
             return
         
-        # Log da URL visitada
+    
         self.log(f'URL visitada: {response.url}')
 
         # Mantendo rastreamento de jogos e preços únicos
         jogos_precos = {}
         jogos_unicos = set()  # Conjunto para rastrear jogos únicos
 
-        # Exemplo: extraindo títulos de jogos ou conteúdos da página
+        
         titles = response.xpath('//span[@class="psw-t-body psw-c-t-1 psw-t-truncate-2 psw-m-b-2"]/text()').getall()
         prices = response.xpath('//span[@class="psw-m-r-3"]/text()').getall()
 
@@ -38,8 +38,8 @@ class WebplaySpider(scrapy.Spider):
             if title not in jogos_unicos:
                 jogos_unicos.add(title)  # Adiciona o título ao conjunto para evitar repetição
                 jogos_precos[title] = price
-                self.log(f'Título encontrado: {title}')  # Log do título encontrado
-                yield {'jogo': title, 'preco': price}  # Usando um dicionário para gerar itens
+                self.log(f'Título encontrado: {title}') 
+                yield {'jogo': title, 'preco': price} 
 
         # Se houver uma próxima página, seguir o link
         next_page = response.xpath('//a[@class="pagination-next"]/@href').get()
